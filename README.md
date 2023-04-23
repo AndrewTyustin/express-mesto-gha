@@ -2,13 +2,19 @@
 # Проект Mesto фронтенд + бэкенд
 
 Технологии
+
 NODE JS
+
 EXPRESS JS
+
 MONGODB
 
 С использованием
+
 ESLint (Airbnb)
+
 Nodemon
+
 EditorConfig
 
 ## Директории
