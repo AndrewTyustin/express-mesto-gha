@@ -1,13 +1,13 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const { errors } = require("celebrate");
+const express = require('express');
+const mongoose = require('mongoose');
+const { errors } = require('celebrate');
 
-const { PORT = 3000, BASE_PATH = "localhost" } = process.env;
+const { PORT = 3000, BASE_PATH = 'localhost' } = process.env;
 
-const rateLimit = require("express-rate-limit");
-const helmet = require("helmet");
+const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
 
-const mainRouter = require("./routes/index");
+const mainRouter = require('./routes/index');
 
 const app = express();
 
@@ -16,10 +16,10 @@ const limiter = rateLimit({
   max: 100,
 });
 
-const responseHandler = require("./middlewares/response-handler");
+const responseHandler = require('./middlewares/response-handler');
 
-const mongoDB = "mongodb://127.0.0.1:27017/mestodb";
-mongoose.set("strictQuery", false);
+const mongoDB = 'mongodb://127.0.0.1:27017/mestodb';
+mongoose.set('strictQuery', false);
 mongoose.connect(mongoDB);
 
 app.use(express.json());

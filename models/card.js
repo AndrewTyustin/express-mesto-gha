@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const validator = require("validator");
+const mongoose = require('mongoose');
+const validator = require('validator');
 
 const cardSchema = new mongoose.Schema({
   name: {
@@ -12,20 +12,20 @@ const cardSchema = new mongoose.Schema({
     type: String,
     validate: {
       validator: (correct) => validator.isURL(correct),
-      message: "Ошибка при передаче изображения карточки",
+      message: 'Ошибка при передаче изображения карточки',
     },
     required: true,
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: "user",
+    ref: 'user',
   },
   likes: [
     {
       type: mongoose.Schema.Types.ObjectId,
       default: [],
-      ref: "user",
+      ref: 'user',
     },
   ],
   createdAt: {
@@ -34,4 +34,4 @@ const cardSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("card", cardSchema);
+module.exports = mongoose.model('card', cardSchema);
