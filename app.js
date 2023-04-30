@@ -1,33 +1,36 @@
-const express = require('express');
-const mongoose = require('mongoose');
+const express = require("express");
+const mongoose = require("mongoose");
+const { errors } = require("celebrate");
 
-const userRouter = require('./routes/users');
-const cardRouter = require('./routes/cards');
+const { PORT = 3000, BASE_PATH = "localhost" } = process.env;
 
-const { PORT = 3000 } = process.env;
-const { ERROR_NOT_FOUND } = require('./utils/response-status');
+const rateLimit = require("express-rate-limit");
+const helmet = require("helmet");
+
+const mainRouter = require("./routes/index");
 
 const app = express();
 
-const mongoDB = 'mongodb://127.0.0.1:27017/mestodb';
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+});
 
-mongoose.set('strictQuery', false);
+const responseHandler = require("./middlewares/response-handler");
+
+const mongoDB = "mongodb://127.0.0.1:27017/mestodb";
+mongoose.set("strictQuery", false);
 mongoose.connect(mongoDB);
 
 app.use(express.json());
+app.use(limiter);
+app.use(helmet());
 
-app.use((req, res, next) => {
-  req.user = { _id: '64455a9adc14c4cc6b9fac63'};
-  next();
+app.use(mainRouter);
+
+app.use(errors());
+app.use(responseHandler);
+
+app.listen(PORT, () => {
+  console.log(`Адрес сервера — http://${BASE_PATH}:${PORT}`);
 });
-app.use(express.urlencoded({ extended: true }));
-app.use('/cards', cardRouter);
-app.use('/users', userRouter);
-
-app.use('*', (req, res) => {
-  res
-    .status(ERROR_NOT_FOUND)
-    .send({ message: 'Запрашиваемая страница не найдена' });
-});
-
-app.listen(PORT, () => {});
